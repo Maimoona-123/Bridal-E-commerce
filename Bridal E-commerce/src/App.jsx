@@ -13,6 +13,8 @@ import Feedback from './pages/Feedback/Feedback';
 import TikTokInspiration from './pages/TiktokInspiration/TiktokInspiration';
 import FAQ from './pages/FAQS/FAQS';
 import Footer from './pages/Footer/Footer';
+import Favourites from './pages/Favourites/Favourites';
+import Contact from './pages/Contact/Contact';
 
 const App = () => {
   return (
@@ -32,6 +34,7 @@ const App = () => {
               <TikTokInspiration/>
               <FAQ/>
               <Footer/>
+
             </>
           }
         />
@@ -43,6 +46,8 @@ const App = () => {
           element={<ProductDetail />}
         />
         <Route path="/lookbook" element={<Lookbook />} />
+        <Route path="/favourites" element={<Favourites />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </div>
   );
