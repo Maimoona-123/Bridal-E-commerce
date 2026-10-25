@@ -8,6 +8,7 @@ import Shop from './pages/Shop/Shop';
 import ProductDetail from './pages/Shop/ProductDetail';
 import FeaturedCollection from './components/FeaturesCollection/FeaturesCollection';
 import Lookbook from './components/LookBook/LookBook';
+import VideoPreview from './pages/VideoPreview/VideoPreview';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
               <Hero />
               <About />
               <FeaturedCollection />
+              <VideoPreview/>
             </>
           }
         />
