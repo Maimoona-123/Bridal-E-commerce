@@ -9,6 +9,10 @@ import ProductDetail from './pages/Shop/ProductDetail';
 import FeaturedCollection from './components/FeaturesCollection/FeaturesCollection';
 import Lookbook from './components/LookBook/LookBook';
 import VideoPreview from './pages/VideoPreview/VideoPreview';
+import Feedback from './pages/Feedback/Feedback';
+import TikTokInspiration from './pages/TiktokInspiration/TiktokInspiration';
+import FAQ from './pages/FAQS/FAQS';
+import Footer from './pages/Footer/Footer';
 
 const App = () => {
   return (
@@ -24,6 +28,10 @@ const App = () => {
               <About />
               <FeaturedCollection />
               <VideoPreview/>
+              <Feedback/>
+              <TikTokInspiration/>
+              <FAQ/>
+              <Footer/>
             </>
           }
         />
