@@ -159,7 +159,7 @@ const Navbar = () => {
           className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap font-serif text-xl font-extrabold uppercase tracking-[0.15em] text-gray-900 sm:text-2xl md:static md:translate-x-0 md:text-3xl md:tracking-[0.2em]"
           aria-label="Chiffon Home"
         >
-          Chiffon<span className="text-red-600">.</span>
+          Nafas Bridal<span className="text-red-600">.</span>
         </Link>
 
         {/* Right Side Icons */}
