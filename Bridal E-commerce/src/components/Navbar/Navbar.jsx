@@ -94,7 +94,7 @@ const Navbar = () => {
             <NavLink to="/" end className={linkClass}>
               Home
             </NavLink>
-          </li>
+          </li> 
 
           {/* Collections Dropdown */}
           <li className="group relative">

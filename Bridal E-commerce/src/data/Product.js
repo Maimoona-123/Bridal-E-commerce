@@ -10,10 +10,22 @@ const images = import.meta.glob(
 
 const img = (file) => images[`../assets/dresess/${file}`];
 
+const videos = import.meta.glob(
+  "../assets/videos/*.{mp4,webm,mov}",
+  {
+    eager: true,
+    query: "?url",
+    import: "default",
+  }
+);
+
+const video = (file) => videos[`../assets/videos/${file}`];
+
 export const WHATSAPP_NUMBER = "923298943579";
 
 const fabric = "Sheesha Silk";
 const embroidery = "Hand Embroidery";
+
 const customization = [
   "Color change",
   "Size & length",
@@ -103,7 +115,7 @@ export const products = [
     fabric,
     embroidery,
     customization,
-    description: "A romantic rose pink lehenga with intricate embroidery.",
+    description: "A rose pink lehenga with intricate embroidery.",
     image: img("28_rose_pink_lehenga.png"),
   },
   {
@@ -297,5 +309,86 @@ export const products = [
     customization,
     description: "A stylish teal kurta for formal and festive gatherings.",
     image: img("teal_kurta.png"),
+  },
+
+  // NEW DESIGNER DRESSES
+
+  {
+    id: "beige-designer-dress",
+    name: "Beige Designer Dress",
+    occasion: "Party Wear",
+    price: 25000,
+    color: "Beige",
+    fabric,
+    embroidery,
+    customization,
+    description: "An elegant beige designer dress with intricate embroidery.",
+    image: img("beige_designer_dress.png"),
+    video: video("beige_dress.mp4"),
+  },
+  {
+    id: "blue-gold-designer-dress",
+    name: "Blue & Gold Designer Dress",
+    occasion: "Party Wear",
+    price: 30000,
+    color: "Blue & Gold",
+    fabric,
+    embroidery,
+    customization,
+    description: "A luxurious blue and gold designer dress.",
+    image: img("blue_gold_designer_dress.png"),
+    video: video("blue_gold_dress.mp4"),
+  },
+  {
+    id: "golden-purple-dress",
+    name: "Golden Purple Designer Dress",
+    occasion: "Formal",
+    price: 25000,
+    color: "Golden & Purple",
+    fabric,
+    embroidery,
+    customization,
+    description: "A stunning golden and purple embroidered dress.",
+    image: img("golden_purple_dress.png"),
+    video: video("golden_purple_dress.mp4"),
+  },
+  {
+    id: "pink-purple-dress",
+    name: "Pink Purple Designer Dress",
+    occasion: "Party Wear",
+    price: 25000,
+    color: "Pink & Purple",
+    fabric,
+    embroidery,
+    customization,
+    description: "An elegant pink and purple designer outfit.",
+    image: img("pink_purple_dress.png"),
+    video: video("pink_purple_dress.mp4"),
+  },
+  {
+    id: "red-gold-dress",
+    name: "Red & Gold Designer Dress",
+    occasion: "Bridal",
+    price: 25000,
+    color: "Red & Gold",
+    fabric,
+    embroidery,
+    customization,
+    description: "A traditional red and gold dress with detailed embroidery.",
+    image: img("red_gold_dress.png"),
+    video: video("red_gold_dress.mp4"),
+  },
+  {
+    id: "red-golden-dress",
+    name: "Red Golden Designer Dress",
+    occasion: "Bridal",
+    price: 25000,
+    color: "Red & Golden",
+    fabric,
+    embroidery,
+    customization,
+    description: "A beautiful red golden designer dress for special occasions.",
+    image: img("red_golden_dress.png"),
+    video: video("red_golden_dress.mp4"),
   },
 ];
