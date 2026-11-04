@@ -22,15 +22,20 @@ const Footer = () => {
 
   return (
     <footer className="relative overflow-hidden border-t border-amber-100 bg-gradient-to-b from-amber-50 via-orange-50 to-white">
+
       {/* Decorative glow */}
       <div className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-amber-200/30 blur-3xl" />
+
       <div className="pointer-events-none absolute -right-20 top-0 h-64 w-64 rounded-full bg-red-100/30 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-5 pb-6 pt-14 sm:px-8 sm:pt-16">
+
         {/* Main Footer */}
         <div className="grid grid-cols-1 gap-10 border-b border-amber-200/70 pb-10 sm:grid-cols-2 lg:grid-cols-4">
+
           {/* Brand */}
           <div className="lg:pr-6">
+
             <Link to="/" className="inline-block">
               <span className="text-3xl font-bold tracking-[0.12em] text-gray-900">
                 CHIFFON<span className="text-red-600">.</span>
@@ -51,15 +56,18 @@ const Footer = () => {
             >
               <i className="ri-tiktok-line" />
             </a>
+
           </div>
 
           {/* Quick Links */}
           <div>
+
             <h3 className="text-base font-bold text-gray-900">
               Quick Links
             </h3>
 
             <div className="mt-5 space-y-3">
+
               {quickLinks.map((link) => (
                 <Link
                   key={link.path}
@@ -70,16 +78,19 @@ const Footer = () => {
                   {link.name}
                 </Link>
               ))}
+
             </div>
           </div>
 
           {/* Collections */}
           <div>
+
             <h3 className="text-base font-bold text-gray-900">
               Our Collections
             </h3>
 
             <div className="mt-5 space-y-3">
+
               {collections.map((item) => (
                 <Link
                   key={item}
@@ -90,11 +101,13 @@ const Footer = () => {
                   {item}
                 </Link>
               ))}
+
             </div>
           </div>
 
           {/* Brand Message */}
           <div>
+
             <h3 className="text-base font-bold text-gray-900">
               Made for Your Moments
             </h3>
@@ -111,11 +124,14 @@ const Footer = () => {
               Explore Inspiration
               <i className="ri-arrow-right-line" />
             </Link>
+
           </div>
+
         </div>
 
         {/* Bottom Bar */}
         <div className="flex flex-col items-center justify-between gap-3 pt-6 text-center sm:flex-row sm:text-left">
+
           <p className="text-xs text-gray-500 sm:text-sm">
             © {new Date().getFullYear()} Chiffon. All rights reserved.
           </p>
@@ -124,7 +140,17 @@ const Footer = () => {
             Elegance in Every Detail
             <span className="mx-2 text-red-500">♥</span>
           </p>
+
+          {/* Admin Portal */}
+          <Link
+            to="/admin"
+            className="text-xs text-gray-500 transition hover:text-red-600 sm:text-sm"
+          >
+            Admin Portal
+          </Link>
+
         </div>
+
       </div>
     </footer>
   );

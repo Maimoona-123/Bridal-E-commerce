@@ -1,6 +1,8 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
 
+import React from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+
+// Existing Components
 import Navbar from './components/Navbar/Navbar';
 import Hero from './pages/Hero/Hero';
 import About from './pages/About/About';
@@ -16,12 +18,25 @@ import Footer from './pages/Footer/Footer';
 import Favourites from './pages/Favourites/Favourites';
 import Contact from './pages/Contact/Contact';
 
+// Admin Components
+import AdminLogin from './Admin/AdminLogin';
+import AdminDashboard from './Admin/AdminDashboard';
+import AdminProducts from './Admin/AdminProducts';
+
 const App = () => {
+  const location = useLocation();
+
+  // Hide public navbar on admin pages
+  const isAdminPage = location.pathname.startsWith('/admin');
+
   return (
     <div>
-      <Navbar />
+
+      {!isAdminPage && <Navbar />}
 
       <Routes>
+
+        {/* Home Page */}
         <Route
           path="/"
           element={
@@ -29,26 +44,44 @@ const App = () => {
               <Hero />
               <About />
               <FeaturedCollection />
-              <VideoPreview/>
-              <Feedback/>
-              <TikTokInspiration/>
-              <FAQ/>
-              <Footer/>
-
+              <VideoPreview />
+              <Feedback />
+              <TikTokInspiration />
+              <FAQ />
+              <Footer />
             </>
           }
         />
 
+        {/* Public Routes */}
         <Route path="/shop" element={<Shop />} />
 
         <Route
           path="/product/:id"
           element={<ProductDetail />}
         />
+
         <Route path="/lookbook" element={<Lookbook />} />
+
         <Route path="/favourites" element={<Favourites />} />
+
         <Route path="/contact" element={<Contact />} />
+
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminLogin />} />
+
+        <Route
+          path="/admin/dashboard"
+          element={<AdminDashboard />}
+        />
+
+        <Route
+          path="/admin/products"
+          element={<AdminProducts />}
+        />
+
       </Routes>
+
     </div>
   );
 };
