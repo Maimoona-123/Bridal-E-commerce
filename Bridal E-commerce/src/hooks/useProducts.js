@@ -1,28 +1,73 @@
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, useCallback } from "react";
 import { getProducts, saveProducts } from "../utils/productStorage";
 
 const useProducts = () => {
-  const [products, setProductsState] = useState(getProducts);
+  const [products, setProductsState] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  // Load Products from IndexedDB
   useEffect(() => {
-    const updateProducts = () => {
-      setProductsState(getProducts());
+    let active = true;
+
+    const updateProducts = async () => {
+      try {
+        const data = await getProducts();
+
+        if (active) {
+          setProductsState(Array.isArray(data) ? data : []);
+        }
+      } catch (error) {
+        console.error("Error loading products:", error);
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
     };
 
-    window.addEventListener("productsUpdated", updateProducts);
-    window.addEventListener("storage", updateProducts);
+    updateProducts();
+
+    const handleUpdate = () => {
+      updateProducts();
+    };
+
+    window.addEventListener("productsUpdated", handleUpdate);
 
     return () => {
-      window.removeEventListener("productsUpdated", updateProducts);
-      window.removeEventListener("storage", updateProducts);
+      active = false;
+      window.removeEventListener("productsUpdated", handleUpdate);
     };
   }, []);
 
-  const setProducts = (newProducts) => {
-    saveProducts(newProducts);
-  };
+  // Save Products to IndexedDB
+  const setProducts = useCallback(async (newProducts) => {
+    try {
+      if (!Array.isArray(newProducts)) {
+        throw new Error("Products must be an array");
+      }
 
-  return { products, setProducts };
+      await saveProducts(newProducts);
+
+      // Update React state
+      setProductsState(newProducts);
+
+      // Notify other components
+      window.dispatchEvent(new Event("productsUpdated"));
+
+      return true;
+
+    } catch (error) {
+      console.error("Product update failed:", error);
+      return false;
+    }
+  }, []);
+
+  return {
+    products,
+    setProducts,
+    loading,
+  };
 };
 
 export default useProducts;

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 const ProductForm = ({ initialProduct, onSave, onCancel }) => {
+
   const [formData, setFormData] = useState({
     name: "",
     occasion: "Bridal",
@@ -14,6 +15,9 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
     video: "",
   });
 
+  const [saving, setSaving] = useState(false);
+
+  // Load Existing Product
   useEffect(() => {
     if (initialProduct) {
       setFormData({
@@ -22,9 +26,22 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
         image: initialProduct.image || "",
         video: initialProduct.video || "",
       });
+    } else {
+      setFormData({
+        name: "",
+        occasion: "Bridal",
+        price: "",
+        color: "",
+        fabric: "Sheesha Silk",
+        embroidery: "Hand Embroidery",
+        description: "",
+        image: "",
+        video: "",
+      });
     }
   }, [initialProduct]);
 
+  // Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -113,30 +130,61 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
   };
 
   // Submit Form
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.image && !formData.video) {
-      alert("Please upload at least one product image or video.");
+    if (saving) return;
+
+    if (!formData.image) {
+      alert("Please upload a product image.");
       return;
     }
 
-    onSave({
-      ...formData,
-      price: Number(formData.price),
-      customization: initialProduct?.customization || [
-        "Color change",
-        "Size & length",
-        "Sleeve style",
-        "Dupatta style",
-      ],
-    });
+    if (!formData.name.trim()) {
+      alert("Please enter product name.");
+      return;
+    }
+
+    if (!formData.price || Number(formData.price) < 0) {
+      alert("Please enter a valid price.");
+      return;
+    }
+
+    try {
+      setSaving(true);
+
+      const result = await onSave({
+        ...formData,
+        name: formData.name.trim(),
+        price: Number(formData.price),
+        customization: initialProduct?.customization || [
+          "Color change",
+          "Size & length",
+          "Sleeve style",
+          "Dupatta style",
+        ],
+      });
+
+      if (result === false) {
+        return;
+      }
+
+      // Form closes through AdminProducts after successful save
+
+    } catch (error) {
+      console.error("Form Submit Error:", error);
+      alert("Unable to save product. Please try again.");
+
+    } finally {
+      setSaving(false);
+    }
   };
 
   const inputClass =
     "w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#8b2635]";
 
   return (
+
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 overflow-y-auto">
 
       <div className="bg-white rounded-xl w-full max-w-2xl p-6 my-auto max-h-[90vh] overflow-y-auto">
@@ -149,6 +197,7 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
 
           {/* Product Name */}
           <div>
+
             <label className="block mb-2 font-medium">
               Product Name
             </label>
@@ -161,12 +210,14 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
               placeholder="Enter dress name"
               required
             />
+
           </div>
 
           {/* Occasion and Price */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
             <div>
+
               <label className="block mb-2 font-medium">
                 Occasion
               </label>
@@ -184,9 +235,11 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
                 <option>Party Wear</option>
                 <option>Formal</option>
               </select>
+
             </div>
 
             <div>
+
               <label className="block mb-2 font-medium">
                 Price (PKR)
               </label>
@@ -201,9 +254,11 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
                 min="0"
                 required
               />
+
             </div>
 
             <div>
+
               <label className="block mb-2 font-medium">
                 Color
               </label>
@@ -216,9 +271,11 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
                 placeholder="Maroon"
                 required
               />
+
             </div>
 
             <div>
+
               <label className="block mb-2 font-medium">
                 Fabric
               </label>
@@ -230,12 +287,14 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
                 className={inputClass}
                 required
               />
+
             </div>
 
           </div>
 
           {/* Embroidery */}
           <div>
+
             <label className="block mb-2 font-medium">
               Embroidery
             </label>
@@ -247,10 +306,12 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
               className={inputClass}
               required
             />
+
           </div>
 
           {/* Description */}
           <div>
+
             <label className="block mb-2 font-medium">
               Description
             </label>
@@ -264,12 +325,14 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
               placeholder="Describe the dress..."
               required
             />
+
           </div>
 
           {/* Image Upload */}
           <div className="border rounded-xl p-4">
+
             <label className="block mb-3 font-semibold">
-              Product Image
+              Product Image *
             </label>
 
             <input
@@ -280,11 +343,13 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
             />
 
             <p className="text-xs text-gray-500 mt-2">
-              Upload high-quality product images. No 1 MB restriction.
+              Upload a high-quality product image.
             </p>
 
             {formData.image && (
+
               <div className="mt-4 relative w-36">
+
                 <img
                   src={formData.image}
                   alt="Product preview"
@@ -298,12 +363,16 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
                 >
                   ×
                 </button>
+
               </div>
+
             )}
+
           </div>
 
           {/* Video Upload */}
           <div className="border rounded-xl p-4">
+
             <label className="block mb-3 font-semibold">
               Product Video (Optional)
             </label>
@@ -317,11 +386,11 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
 
             <p className="text-xs text-gray-500 mt-2">
               Supported formats: MP4, WebM, MOV.
-              No 1 MB restriction.
             </p>
 
             {formData.video && (
-              <div className="mt-4 relative">
+
+              <div className="mt-4">
 
                 <video
                   src={formData.video}
@@ -339,7 +408,9 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
                 </button>
 
               </div>
+
             )}
+
           </div>
 
           {/* Buttons */}
@@ -347,14 +418,20 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
 
             <button
               type="submit"
-              className="flex-1 bg-[#8b2635] text-white py-3 rounded-lg hover:bg-[#701d2a]"
+              disabled={saving}
+              className="flex-1 bg-[#8b2635] text-white py-3 rounded-lg hover:bg-[#701d2a] disabled:opacity-50"
             >
-              {initialProduct ? "Update Product" : "Save Product"}
+              {saving
+                ? "Saving..."
+                : initialProduct
+                ? "Update Product"
+                : "Save Product"}
             </button>
 
             <button
               type="button"
               onClick={onCancel}
+              disabled={saving}
               className="flex-1 bg-gray-200 py-3 rounded-lg hover:bg-gray-300"
             >
               Cancel
@@ -363,7 +440,9 @@ const ProductForm = ({ initialProduct, onSave, onCancel }) => {
           </div>
 
         </form>
+
       </div>
+
     </div>
   );
 };

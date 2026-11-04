@@ -1,17 +1,13 @@
-
-import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import useProducts from "../hooks/useProducts";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const { products } = useProducts();
+  const { products = [] } = useProducts();
 
-  useEffect(() => {
-    if (localStorage.getItem("chiffon_admin_logged_in") !== "true") {
-      navigate("/admin");
-    }
-  }, [navigate]);
+  const isLoggedIn =
+    localStorage.getItem("chiffon_admin_logged_in") === "true";
 
   const handleLogout = () => {
     localStorage.removeItem("chiffon_admin_logged_in");
@@ -26,24 +22,27 @@ const AdminDashboard = () => {
     },
     {
       title: "Bridal Collection",
-      value: products.filter(p => p.occasion === "Bridal").length,
+      value: products.filter((p) => p.occasion === "Bridal").length,
       icon: "ri-heart-line",
     },
     {
       title: "Mehndi Collection",
-      value: products.filter(p => p.occasion === "Mehndi").length,
+      value: products.filter((p) => p.occasion === "Mehndi").length,
       icon: "ri-leaf-line",
     },
     {
       title: "Valima Collection",
-      value: products.filter(p => p.occasion === "Valima").length,
+      value: products.filter((p) => p.occasion === "Valima").length,
       icon: "ri-star-line",
     },
   ];
 
+  if (!isLoggedIn) {
+    return <Navigate to="/admin" replace />;
+  }
+
   return (
     <div className="min-h-screen bg-[#f8f5f2]">
-
       <header className="bg-white shadow-sm px-6 py-5 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-[#8b2635]">
           CHIFFON ADMIN
@@ -58,7 +57,6 @@ const AdminDashboard = () => {
       </header>
 
       <main className="p-6 md:p-10 max-w-7xl mx-auto">
-
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-800">
             Dashboard Overview
@@ -69,7 +67,6 @@ const AdminDashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-
           {stats.map((item) => (
             <div
               key={item.title}
@@ -86,7 +83,6 @@ const AdminDashboard = () => {
               </p>
             </div>
           ))}
-
         </div>
 
         <div className="bg-white rounded-xl p-8 mt-8 shadow-sm">
@@ -111,7 +107,6 @@ const AdminDashboard = () => {
             Visit Public Website
           </Link>
         </div>
-
       </main>
     </div>
   );

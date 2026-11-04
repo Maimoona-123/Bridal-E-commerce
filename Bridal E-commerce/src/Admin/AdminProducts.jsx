@@ -17,43 +17,59 @@ const AdminProducts = () => {
     }
   }, [navigate]);
 
-  const handleSave = (productData) => {
+  // Save or Update Product
+  const handleSave = async (productData) => {
+    let updatedProducts;
+
     if (editingProduct) {
-      const updatedProducts = products.map((product) =>
+      updatedProducts = products.map((product) =>
         product.id === editingProduct.id
           ? { ...product, ...productData }
           : product
       );
-
-      setProducts(updatedProducts);
     } else {
       const newProduct = {
         ...productData,
-        id: `chiffon-${Date.now()}`,
+        id: `chiffon-${Date.now()}-${Math.random()
+          .toString(36)
+          .slice(2, 7)}`,
       };
 
-      setProducts([...products, newProduct]);
+      updatedProducts = [...products, newProduct];
     }
+
+    const success = await setProducts(updatedProducts);
+
+    if (!success) return;
 
     setShowForm(false);
     setEditingProduct(null);
   };
 
+  // Edit Product
   const handleEdit = (product) => {
     setEditingProduct(product);
     setShowForm(true);
   };
 
-  const handleDelete = (id) => {
+  // Delete Product
+  const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this product?"
     );
 
     if (!confirmDelete) return;
 
-    setProducts(products.filter((product) => product.id !== id));
+    const updatedProducts = products.filter(
+      (product) => product.id !== id
+    );
+
+    const success = await setProducts(updatedProducts);
+
+    if (!success) return;
   };
 
+  // Logout
   const handleLogout = () => {
     localStorage.removeItem("chiffon_admin_logged_in");
     navigate("/admin");
@@ -62,6 +78,7 @@ const AdminProducts = () => {
   return (
     <div className="min-h-screen bg-[#f8f5f2]">
 
+      {/* Header */}
       <header className="bg-white shadow-sm px-6 py-5 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-[#8b2635]">
           CHIFFON ADMIN
@@ -77,6 +94,7 @@ const AdminProducts = () => {
 
       <main className="max-w-7xl mx-auto p-6 md:p-10">
 
+        {/* Page Heading */}
         <div className="flex flex-wrap justify-between items-center gap-4 mb-8">
 
           <div>
@@ -108,6 +126,7 @@ const AdminProducts = () => {
 
         </div>
 
+        {/* Products Table */}
         <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
 
           <table className="w-full min-w-[700px] text-left">
@@ -123,7 +142,6 @@ const AdminProducts = () => {
             </thead>
 
             <tbody>
-
               {products.map((product) => (
                 <tr key={product.id} className="border-t">
 
@@ -172,19 +190,22 @@ const AdminProducts = () => {
 
               {products.length === 0 && (
                 <tr>
-                  <td colSpan="5" className="text-center p-10 text-gray-500">
+                  <td
+                    colSpan="5"
+                    className="text-center p-10 text-gray-500"
+                  >
                     No products available.
                   </td>
                 </tr>
               )}
-
             </tbody>
-          </table>
 
+          </table>
         </div>
 
       </main>
 
+      {/* Product Form */}
       {showForm && (
         <ProductForm
           initialProduct={editingProduct}
